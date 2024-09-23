@@ -1,5 +1,8 @@
 import math
 import random
+import os
+os.environ["SDL_VIDEODRIVER"] = "dummy"
+
 import pygame
 from pygame import mixer
 
