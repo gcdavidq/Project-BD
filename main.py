@@ -5,35 +5,46 @@ os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 import pygame
 from pygame import mixer
-
 import time
 from database import insertar_voto, obtener_movimiento_ganador  # Importar funciones de la base de datos
 
-# Initialize the pygame
+# Inicializar pygame
 pygame.init()
 
-# Create the screen
+# Inicializa pygame y el mixer solo si el entorno tiene soporte de video/sonido
+if os.environ.get("SDL_VIDEODRIVER") != "dummy":
+    pygame.mixer.init()
+    pygame.mixer.music.load("background.wav")
+    pygame.mixer.music.play(-1)
+else:
+    print("Modo headless: sonido deshabilitado")
+
+# Sonido de disparo y explosión
+if os.environ.get("SDL_VIDEODRIVER") != "dummy":
+    laserSound = pygame.mixer.Sound("laser.wav")
+    explosionSound = pygame.mixer.Sound("explosion.wav")
+else:
+    laserSound = None
+    explosionSound = None
+
+# Crear la pantalla
 screen = pygame.display.set_mode((800, 600))
 
 # Background
 background = pygame.image.load('background.png')
-
-# Sound
-#mixer.music.load("background.wav")
-#mixer.music.play(-1)
 
 # Caption and Icon  
 pygame.display.set_caption("Space Invader")
 icon = pygame.image.load('ufo.png')
 pygame.display.set_icon(icon)
 
-# Player
+# Jugador
 playerImg = pygame.image.load('player.png')
 playerX = 370
 playerY = 480
 playerX_change = 0
 
-# Enemy
+# Enemigos
 enemyImg = []
 enemyX = []
 enemyY = []
@@ -48,7 +59,7 @@ for i in range(num_of_enemies):
     enemyX_change.append(4)
     enemyY_change.append(40)
 
-# Bullet
+# Bala
 bulletImg = pygame.image.load('bullet.png')
 bulletX = 0
 bulletY = 480
@@ -56,7 +67,7 @@ bulletX_change = 0
 bulletY_change = 10
 bullet_state = "ready"
 
-# Score
+# Puntaje
 score_value = 0
 font = pygame.font.Font('freesansbold.ttf', 32)
 textX = 10
@@ -86,10 +97,7 @@ def fire_bullet(x, y):
 
 def isCollision(enemyX, enemyY, bulletX, bulletY):
     distance = math.sqrt(math.pow(enemyX - bulletX, 2) + (math.pow(enemyY - bulletY, 2)))
-    if distance < 27:
-        return True
-    else:
-        return False
+    return distance < 27
 
 # Variables de nivel y dificultad
 current_level = 1
@@ -119,10 +127,6 @@ def generate_enemies(level):
         enemyX_change.append(level_difficulty[level]['enemy_speed'])
         enemyY_change.append(level_difficulty[level]['enemy_y_change'])
 
-# Sonido de disparo y explosión
-laserSound = mixer.Sound("laser.wav")
-explosionSound = mixer.Sound("explosion.wav")
-
 # Generar enemigos al iniciar el primer nivel
 generate_enemies(current_level)
 
@@ -145,7 +149,8 @@ while running:
             elif movimiento_ganador == 'Derecha':
                 playerX_change = 5
             elif movimiento_ganador == 'Disparar' and bullet_state == "ready":
-                laserSound.play()
+                if laserSound:
+                    laserSound.play()
                 bulletX = playerX
                 fire_bullet(bulletX, bulletY)
         ultimo_voto_tiempo = time.time()
@@ -166,7 +171,8 @@ while running:
             if event.key == pygame.K_SPACE:
                 current_time = pygame.time.get_ticks()
                 if bullet_state == "ready" and current_time - last_shot_time > fire_rate:
-                    laserSound.play()
+                    if laserSound:
+                        laserSound.play()
                     bulletX = playerX
                     fire_bullet(bulletX, bulletY)
                     last_shot_time = current_time
@@ -204,7 +210,8 @@ while running:
         # Verificar colisión
         collision = isCollision(enemyX[i], enemyY[i], bulletX, bulletY)
         if collision:
-            explosionSound.play()
+            if explosionSound:
+                explosionSound.play()
             bulletY = 480
             bullet_state = "ready"
             score_value += 1
