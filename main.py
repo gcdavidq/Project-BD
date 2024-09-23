@@ -3,6 +3,9 @@ import random
 import pygame
 from pygame import mixer
 
+import time
+from database import insertar_voto, obtener_movimiento_ganador  # Importar funciones de la base de datos
+
 # Initialize the pygame
 pygame.init()
 
@@ -123,9 +126,27 @@ generate_enemies(current_level)
 fire_rate = 200
 last_shot_time = pygame.time.get_ticks()
 
+# Lógica para obtener el movimiento ganador
+ultimo_voto_tiempo = time.time()
+
 # Game Loop
 running = True
 while running:
+
+    # Cada minuto, obtener el movimiento ganador
+    if time.time() - ultimo_voto_tiempo > 60:
+        movimiento_ganador = obtener_movimiento_ganador()
+        if movimiento_ganador:
+            if movimiento_ganador == 'Izquierda':
+                playerX_change = -5
+            elif movimiento_ganador == 'Derecha':
+                playerX_change = 5
+            elif movimiento_ganador == 'Disparar' and bullet_state == "ready":
+                laserSound.play()
+                bulletX = playerX
+                fire_bullet(bulletX, bulletY)
+        ultimo_voto_tiempo = time.time()
+
     screen.fill((0, 0, 0))
     screen.blit(background, (0, 0))
 
