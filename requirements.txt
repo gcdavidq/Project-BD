@@ -1,2 +1,0 @@
-pygame==2.1.0 --only-binary :all:
-mysql-connector-python==8.0.27
