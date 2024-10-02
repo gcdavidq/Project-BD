@@ -6,4 +6,4 @@ Aquí encontrarán los trabajos, entregables, proyectos del curso de Bases de Da
 + Llanos Angeles Leily Marlith 
 + Luque Mamani Magno Ricardo 
 + Mendoza Villar Antony Iván 
-
++ Quezada Marceliano Gian Carlos 
