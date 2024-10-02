@@ -1,3 +1,18 @@
+[![AWS](https://img.shields.io/badge/AWS-%20-101010?style=for-the-badge&logo=amazon-aws&logoColor=white&labelColor=FF9900)](https://aws.amazon.com/)
+[![Pygame](https://img.shields.io/badge/Pygame-%20-101010?style=for-the-badge&logo=python&logoColor=white&labelColor=3776AB)](https://www.pygame.org/)
+[![OS](https://img.shields.io/badge/OS-%20-101010?style=for-the-badge&logo=linux&logoColor=white&labelColor=FCC624)](https://en.wikipedia.org/wiki/Operating_system)
+[![SQL](https://img.shields.io/badge/SQL-%20-101010?style=for-the-badge&logo=postgresql&logoColor=white&labelColor=336791)](https://www.postgresql.org/)
+[![VS Code](https://img.shields.io/badge/VS_Code-%20-101010?style=for-the-badge&logo=visual-studio-code&logoColor=white&labelColor=007ACC)](https://code.visualstudio.com/)
+[![HTML](https://img.shields.io/badge/HTML-%20-101010?style=for-the-badge&logo=html5&logoColor=white&labelColor=E34F26)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+[![Numpy](https://img.shields.io/badge/Numpy-%20-101010?style=for-the-badge&logo=numpy&logoColor=white&labelColor=013243)](https://numpy.org/)
+[![Sys](https://img.shields.io/badge/Sys-%20-101010?style=for-the-badge&logo=linux&logoColor=white&labelColor=FCC624)](https://docs.python.org/3/library/sys.html)
+
+<p align="center">
+  <a href="https://github.com/DenverCoder1/readme-typing-svg">
+    <img src="https://readme-typing-svg.herokuapp.com?font=Time+New+Roman&color=F1C40F&size=25&center=true&vCenter=true&width=600&height=100&lines=UNIVERSIDAD+PERUANA+CAYETANO+HEREDIA">
+  </a>
+</p>
+
 ## BIENVENIDOS A NUESTRO REPOSITORIO GRUPAL
 Aquí encontrarán los trabajos, entregables, proyectos del curso de Bases de Datos.
 
@@ -85,7 +100,94 @@ Otra alternativa viable es la creación de una instancia en AWS EC2 para alojar 
 aplicación. Esta opción es particularmente conveniente en caso de un incremento en el número de usuarios, ya que AWS proporcionaría una infraestructura escalable y servicios que facilitarían la administración y el mantenimiento del sistema.
 
 
+## AVANCES REALIZADOS  
+### Adaptación del Juego Bloxorz 
 
+Como se mencionó anteriormente, el juego original 'Bloxorz' está desarrollado en 3D; sin 
+embargo, para los propósitos de este proyecto se optó por realizar una versión en 2D. Para llevar a cabo este cambio dimensional, utilizamos herramientas de Inteligencia Artificial que facilitaron la conversión inicial, y posteriormente adaptamos el juego a nuestras necesidades específicas. Entre las adaptaciones realizadas se incluyen: la ampliación del número de niveles, la implementación de una doble pantalla, la integración con SQL para la gestión de datos, y la mejora de la interfaz de usuario, entre otros aspectos. 
+### Versión Actual del Juego: 
+De acuerdo con los requisitos especificados en el enunciado del proyecto, se desarrollaron 
+dos pantallas principales: 
+
+#### • Primera Pantalla: Esta pantalla combina la visualización del juego con la opción 
+de movimiento, lo que permite a los usuarios votar por el próximo movimiento a realizar. Esta característica fomenta la participación y la dinámica de votación en el juego. 
+#### • Segunda Pantalla: La segunda pantalla está destinada únicamente a la 
+visualización del juego. En esta pantalla, el usuario puede observar el progreso del juego, pero no tiene la capacidad de votar para determinar el próximo movimiento. Esto asegura una separación clara entre la interacción activa y la observación pasiva del juego. 
+
+Entonces, para integrar ambas pantallas de manera amigable, creamos un menú, en el cual el usuario puede seleccionar si quiere: 
+-  ver y jugar
+-  solo ver
+-  salir del juego
+
+### Menú principal: 
+![image](https://github.com/user-attachments/assets/4e2532ca-c67a-43cc-8b6f-46bc90b56c21)
+
+### Pantalla Ver y Jugar:
+![image](https://github.com/user-attachments/assets/662f3600-1266-4826-a755-2606742b7e40)
+
+### Pantalla solo ver: 
+![image](https://github.com/user-attachments/assets/b375c43c-63c7-4b7f-8e79-45f0d2a7036f)
+
+## Implementación de la dinámica de votación: 
+Actualmente, este es nuestro diagrama de la base de datos:
+![image](https://github.com/user-attachments/assets/30b3b52e-d3a8-4459-9a72-84968b492eeb)
+El diagrama muestra la relación entre tres tablas que consideramos importantes para realizar las diferentes consultas en el sistema. En primer lugar, tenemos la tabla votos, que registra la interacción del usuario con las opciones del juego. Esta tabla incluye las siguientes columnas:
+
+- id_votos: Clave primaria que identifica de manera única cada voto.
+- tiempo_registro: Almacena el tiempo en el que se realizó la inserción del voto. 
+- voto: Representa la opción que seleccionó el usuario (por ejemplo, arriba, abajo, izquierda, derecha). 
+- votos_id_historial: Clave foránea que referencia a la tabla historial. 
+- nivel: Indica el nivel o la dificultad del juego en el momento en que se emitió el voto. 
+- posicion_x y posicion_y: Almacenan las coordenadas del bloque en el juego.
+
+En segundo lugar, tenemos la tabla historial, que almacena las decisiones finales del 
+juego basadas en los votos recibidos. Las columnas en esta tabla incluyen: 
+- id_historial: Clave primaria que identifica cada registro en el historial. 
+- decision: Almacena la decisión tomada (opción votada mayoritariamente).
+- nivel: Indica el nivel del juego en ese momento. 
+- posicion_x y posicion_y: Guardan las coordenadas del bloque al momento de tomar la decisión final.
+
+Por último, está la tabla verificaciones, que se encarga de registrar si un voto ha sido 
+verificado o no. Sus columnas son: 
+- id_verificaciones: Clave primaria que identifica cada verificación. 
+- verificacion: Indica si un voto ha sido verificado (1) o no (0). 
+- verificaciones_id_votos: Clave foránea que enlaza la verificación con el voto correspondiente en la tabla votos. 
+Estas tres tablas están relacionadas de tal manera que se puede rastrear el historial de decisiones tomadas en el juego basadas en los votos de los usuarios, asegurando que solo los votos verificados se consideren en las decisiones finales.
+
+## Ejemplos de cómo funciona la base de datos:
+![image](https://github.com/user-attachments/assets/ac30dfe5-94b9-41b4-92e9-0b3e4d3321d3)
+
+## Despliegue del juego. 
+Como se mencionó anteriormente, existen diversas formas de realizar el despliegue del 
+videojuego. En principio, nosotros optamos por subirlo a una instancia de EC2 y de ahí realizar su distribución. Esto principalmente porque es una buena alternativa debido a las múltiples herramientas que integra AWS (Balanceo de Carga, Elasticidad, etc), permitiendo así un buen entorno en caso el juego lo requiera. 
+Para realizar este despliegue, empezamos con la creación de una instancia EC2
+
+![image](https://github.com/user-attachments/assets/c687d5a7-aef5-4c22-9e4d-412008504bd1)
+
+Con ayuda del PowerShell de Windows, nos conectamos a la instancia creada, dentro de esta creamos una máquina virtual, para así descargar los paquetes requeridos, entre los principales las librerías del juego y XRDP (Servidor de Protocolo de Escritorio Remoto).  
+Tuvimos que subir el juego a la instancia desde nuestra computadora local:
+![image](https://github.com/user-attachments/assets/6e801908-0f9f-4794-b8d0-e1403b7011c9)
+
+Luego, dentro de la consola de administración de AWS, tuvimos que configurar el puerto correspondiente para que se realicé la conexión con el escritorio remoto: 
+![image](https://github.com/user-attachments/assets/027fadf8-33c9-42f1-a3c7-1bfa93108d23)
+
+Por último, accedemos al programa ‘conexión a control remoto’ desde nuestra computadora local.
+
+![image](https://github.com/user-attachments/assets/cf54d74d-98a0-42c8-94d9-060dde97caeb)
+Colocamos las credenciales de nuestra instancia (ip_publica y usuario), para finalmente poder ingresar a la máquina virtual.
+
+![image](https://github.com/user-attachments/assets/5b1d4fe8-c5ee-4286-9d4d-809423181b89)
+
+En este punto, buscamos el archivo del juego, lo ejecutamos y podremos jugar desde la máquina virtual.
+![image](https://github.com/user-attachments/assets/0c9ebd24-b377-4f5f-a06e-0fa948039356)
+
+
+## Dificultades Encontradas 
+Hasta el momento de la elaboración del presente informe, las principales dificultades 
+giran en torno a la integración de la base de datos con el juego y el despliegue de este.
+
+En cuanto a la integración de la base de datos con el juego, una de las principales dificultades fue definir correctamente las relaciones entre las tablas. Fue crucial asegurarse de que las claves primarias y foráneas mantuvieran una relación adecuada, ya que en un principio se definieron dos tablas principales: "votos" e "historial". El registro de los votos de los usuarios en la tabla "votos" no presentó mayores problemas, gracias a que se implementó un procedimiento almacenado que permitía realizar la inserción directamente desde el juego. El siguiente proceso involucra la elección de los votos más frecuentes en un lapso de cinco segundos, a partir de la primera inserción no verificada hasta la última registrada dentro de dicho periodo. En este caso, cuando se insertaba un nuevo registro en la tabla "votos", un trigger se encargaba de verificar si dicho voto cumplía con la condición del tiempo permitido. El principal problema surgió al intentar actualizar la columna verificación (de 0 a 1) en la tabla "votos". Como esta tabla estaba vinculada a un trigger, no se permitían las actualizaciones automáticas, lo que generó dificultades para realizar operaciones de verificación. Otro de los desafíos fue el manejo del lapso de espera de cinco segundos, que debía respetarse para que, en base a los votos registrados en ese tiempo, se pudiera tomar una decisión sobre el movimiento del bloque en el juego. 
+Durante el desarrollo del juego en Pygame, `Bloxorz en 2D`, se han presentado diversas dificultades técnicas que requirieron soluciones específicas para garantizar su funcionamiento óptimo. Una de las principales áreas de complejidad fue la generación del terreno de juego, donde identificar cada cuadro en su posición dentro de la matriz tomó tiempo considerable. Dado que el terreno está compuesto por una cuadrícula donde cada celda tiene una ubicación precisa, fue necesario implementar un sistema eficiente que asegurara que cada elemento estuviera en su lugar correcto. La dificultad residía en gestionar dinámicamente esta disposición, ya que errores en las coordenadas podrían afectar la jugabilidad. 
 
 
 
