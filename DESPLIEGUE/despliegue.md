@@ -1,1 +1,2 @@
-Por el momento, en esta carpeta estará incluida la versoin de descarga del juego.
+Por el momento, en esta se colocará el link para la descarga del juego:
+https://ricardo9547.itch.io/bloxorz2d?download
