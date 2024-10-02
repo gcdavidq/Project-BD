@@ -227,9 +227,18 @@ Además, NoVNC actúa como un Gateway que traduce las conexiones VNC a WebSocket
 ![image](https://github.com/user-attachments/assets/2bcea5ea-418a-4da9-8c21-d03402ad2f7d)
 
 
+Como otra opción, y más complicada, es el empleo de Flask y Socket.IO, ello debido principalmente a la poca familiarización que tenemos con ambos, así como el poco conocimiento de su sintaxis. Sin embargo, no eliminamos la posibilidad de su uso en la presentación final. 
+Aunque no hemos encontrado una manera de desplegar el juego directamente en la web, hemos logrado hacerlo accesible para todos mediante una solución alternativa. Utilizamos PyInstaller para convertir el código de Pygame en un archivo ejecutable. Este enfoque permitió empaquetar todo el proyecto, incluidas las dependencias necesarias, en una aplicación autónoma que puede ejecutarse en sistemas operativos sin necesidad de instalar Python o configurar entornos adicionales. 
+Una vez que el ejecutable estuvo listo, lo subimos a itch.io, una plataforma que facilita la distribución de juegos independientes. Itch.io ofrece la opción de descargar el archivo ejecutable, lo que permite a los usuarios instalar y jugar el juego directamente en su dispositivo. De este modo, aunque el juego no está ejecutándose en un navegador, está disponible para una amplia audiencia con una experiencia de usuario sencilla y accesible.
 
-
-
+## CONCLUSIÓN:
+Actualmente, el desarrollo del proyecto va en una buena dirección. Las bases que nos hemos planteado nos han permitido poder probar múltiples opciones para cada una de las partes del proyecto sin cambiar su propósito principal. Este informe detallo en la medida de lo posible cada una de las áreas de nuestro proyecto, tanto los avance, retos afrontados y soluciones planteadas que se siguen probando.  
+En resumen, estos serían las mejoras para la versión final del proyecto: 
+- Implementar funciones que permitan el uso de una base de datos robusta, con el fin de mejorar la experiencia de juego. 
+- Mejorar la apariencia del menú principal del juego. 
+- Seleccionar las herramientas finales que se usarán para el despliegue de la página web. 
+- Documentar detalladamente los scripts creados. 
+- Realizar un testeo a la versión final con el propósito de encontrar bugs y/o mejoras
 
 
 
