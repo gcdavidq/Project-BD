@@ -220,12 +220,10 @@ La segunda opción, era el uso de VNC Y NoVNC. El sistema de VNC (Virtual Networ
 
 Además, NoVNC actúa como un Gateway que traduce las conexiones VNC a WebSockets, lo que hace posible la transmisión de datos gráficos directamente a través de HTTP y WebSockets. Lamentablemente, esta opción tampoco era viable para nuestro propósito, pues VNC y NoVNC tenían limitaciones en cuanto a permitir que múltiples usuarios accedan al mismo entorno de juego y se puedan controlar de manera colaborativa. Como tal, estos sistemas están más orientados a replicar un escritorio remoto completo en una máquina, pero no están optimizados para la interacción en tiempo real con múltiples usuarios sobre la misma aplicación. Para este caso, también adjuntamos evidencias de lo realizado:
 
-![image](https://github.com/user-attachments/assets/5743044b-7771-4ac5-832c-3c8ae0e54688)
 
-![image](https://github.com/user-attachments/assets/be20ba50-1a63-415f-b6b3-a00c0202039b)
-
-![image](https://github.com/user-attachments/assets/2bcea5ea-418a-4da9-8c21-d03402ad2f7d)
-
+| Iinterfaz Web noVNC | Error 1 | Error 2 |
+|---------|---------|---------|
+| ![image](https://github.com/user-attachments/assets/5743044b-7771-4ac5-832c-3c8ae0e54688) | ![image](https://github.com/user-attachments/assets/be20ba50-1a63-415f-b6b3-a00c0202039b) | ![image](https://github.com/user-attachments/assets/2bcea5ea-418a-4da9-8c21-d03402ad2f7d) |
 
 Como otra opción, y más complicada, es el empleo de Flask y Socket.IO, ello debido principalmente a la poca familiarización que tenemos con ambos, así como el poco conocimiento de su sintaxis. Sin embargo, no eliminamos la posibilidad de su uso en la presentación final. 
 Aunque no hemos encontrado una manera de desplegar el juego directamente en la web, hemos logrado hacerlo accesible para todos mediante una solución alternativa. Utilizamos PyInstaller para convertir el código de Pygame en un archivo ejecutable. Este enfoque permitió empaquetar todo el proyecto, incluidas las dependencias necesarias, en una aplicación autónoma que puede ejecutarse en sistemas operativos sin necesidad de instalar Python o configurar entornos adicionales. 
