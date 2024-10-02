@@ -216,10 +216,15 @@ La primera opción que consideramos para el despliegue del juego es la de usar s
 Adjuntamos un video con evidencias de lo mencionado: https://drive.google.com/file/d/1uKaPJ5XWATHuOSpzlhJn3006on3HEm6D/vie w?usp=sharing 
 
 
+La segunda opción, era el uso de VNC Y NoVNC. El sistema de VNC (Virtual Network Computing) permite el acceso remoto a un entorno gráfico de una computadora a través de una red. Por otro lado, NoVNC es una interfaz que permite acceder al servidor VNC directamente desde un navegador web, lo cual elimina la necesidad de instalar un cliente RDP o VNC adicional. Esta opción, parecía interesante porque su implementación y uso eran relativamente fáciles. En cuanto al servidor VNC, este se instala en la instancia EC2, y ejecuta el entorno gráfico. Por otro lado, el NoVNC permite acceder al servidor VNC desde cualquier navegador, convirtiendo la conexión en un proceso desde un enlace web.  
 
+Además, NoVNC actúa como un Gateway que traduce las conexiones VNC a WebSockets, lo que hace posible la transmisión de datos gráficos directamente a través de HTTP y WebSockets. Lamentablemente, esta opción tampoco era viable para nuestro propósito, pues VNC y NoVNC tenían limitaciones en cuanto a permitir que múltiples usuarios accedan al mismo entorno de juego y se puedan controlar de manera colaborativa. Como tal, estos sistemas están más orientados a replicar un escritorio remoto completo en una máquina, pero no están optimizados para la interacción en tiempo real con múltiples usuarios sobre la misma aplicación. Para este caso, también adjuntamos evidencias de lo realizado:
 
+![image](https://github.com/user-attachments/assets/5743044b-7771-4ac5-832c-3c8ae0e54688)
 
+![image](https://github.com/user-attachments/assets/be20ba50-1a63-415f-b6b3-a00c0202039b)
 
+![image](https://github.com/user-attachments/assets/2bcea5ea-418a-4da9-8c21-d03402ad2f7d)
 
 
 
