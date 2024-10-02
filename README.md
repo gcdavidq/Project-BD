@@ -5,4 +5,5 @@ Aquí encontrarán los trabajos, entregables, proyectos del curso de Bases de Da
 + Aybar Escobar Edithson Ricardo
 + Llanos Angeles Leily Marlith 
 + Luque Mamani Magno Ricardo 
++ Mendoza Villar Antony Iván 
 
