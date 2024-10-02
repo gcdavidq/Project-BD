@@ -4,4 +4,5 @@ Aquí encontrarán los trabajos, entregables, proyectos del curso de Bases de Da
 ## Integrantes de equipo:
 + Aybar Escobar Edithson Ricardo
 + Llanos Angeles Leily Marlith 
++ Luque Mamani Magno Ricardo 
 
