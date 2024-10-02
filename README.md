@@ -191,6 +191,19 @@ Durante el desarrollo del juego en Pygame, `Bloxorz en 2D`, se han presentado di
 
 
 
+Otra dificultad importante se presentó con la lógica de movimiento del bloque. Aunque solo se permiten cuatro movimientos—arriba, abajo, izquierda y derecha—, el bloque cambia de estado dependiendo de su orientación, ya sea vertical, horizontal o parado. Cada estado implica diferentes reglas de desplazamiento, lo que complicó el desarrollo de la lógica correspondiente y la correcta visualización del bloque durante cada movimiento. Asimismo, fue necesario gestionar los límites del terreno para evitar que el bloque saliera de la matriz o se quedara en una posición inválida, aumentando la complejidad del sistema. 
+La implementación de la lógica de las múltiples palancas dentro de los niveles presentó desafíos adicionales. Existen diversos tipos de palancas, cada una con funciones específicas como activar o desactivar partes del terreno, y su interacción con el bloque debía ser gestionada con precisión. Además, algunas palancas interactúan de manera diferente según el bloque que las activa, lo que exigió un diseño cuidadoso de las interacciones para asegurar que las acciones desencadenadas fueran coherentes y no provocaran errores. Este sistema requería una sincronización precisa entre la activación de las palancas y los cambios en el entorno, lo que añadió una capa de complejidad al desarrollo. 
+Por otro lado, al momento de realizar el despliegue, consideramos que no tenemos una secuencia clara de este, he ahí la primera dificultad. Pues, si bien existen muchos métodos y herramientas para hacerlo, cada uno tiene sus ventajas y contras, por lo que no nos decidimos por uno en particular. En principio, lo que el proyecto pide es que el juego se pueda jugar en 5 computadores remotamente. Sin embargo, consideramos que el juego tiene potencial para que se despliegue y se juegue en la web. Líneas arriba se menciona que el juego se puede subir a una instancia EC2, lo cual es bastante beneficioso si queremos cumplir con dicho despliegue. Aquí es donde entra la dificultad por no saber que metodología emplear:
+
+- Uso de Flask y socket IO 
+- Uso de VNC y NOVNC 
+- Uso de solamente XRDP 
+La forma en la que se trató de emplear cada una de estas alternativas se detallará más adelante.
+
+Posibles soluciones 
+### - Para la integración de la base de datos con el juego   
+En cuanto al problema de actualización de la tabla "historial", se identificaron dificultades relacionadas con el trigger vinculado a la tabla "votos". Este problema surgía porque MySQL no permitía realizar cambios en la misma tabla que activaba el trigger. Para solucionar esta limitación, se creó una nueva tabla denominada "verificaciones". Esta tabla actúa como intermediaria, permitiendo que, al momento de verificar si los registros evaluados tenían un valor igual a 0, se actualice su estado sin problemas. Una vez verificado el registro en la tabla "verificaciones", se permite la actualización sin interferencias y, posteriormente, la inserción de un nuevo registro en la tabla "historial" se realiza correctamente, respetando las restricciones de tiempo previamente mencionadas, que es un lapso de 5 segundos.
+
 
 
 
