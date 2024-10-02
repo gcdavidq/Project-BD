@@ -205,7 +205,15 @@ Posibles soluciones
 En cuanto al problema de actualización de la tabla "historial", se identificaron dificultades relacionadas con el trigger vinculado a la tabla "votos". Este problema surgía porque MySQL no permitía realizar cambios en la misma tabla que activaba el trigger. Para solucionar esta limitación, se creó una nueva tabla denominada "verificaciones". Esta tabla actúa como intermediaria, permitiendo que, al momento de verificar si los registros evaluados tenían un valor igual a 0, se actualice su estado sin problemas. Una vez verificado el registro en la tabla "verificaciones", se permite la actualización sin interferencias y, posteriormente, la inserción de un nuevo registro en la tabla "historial" se realiza correctamente, respetando las restricciones de tiempo previamente mencionadas, que es un lapso de 5 segundos.
 
 
+### - Para la mejora del juego 
+Para resolver la dificultad en la generación del terreno, se implementó un sistema basado en matrices que mapea la disposición de cada celda en el tablero. El código asigna coordenadas específicas a cada cuadro dentro de la matriz, lo que permite una identificación precisa de la posición de cada celda. Esto asegura que los elementos del terreno se coloquen correctamente y se eviten errores en la disposición de las celdas. 
+En cuanto al movimiento del bloque, la solución se desarrolló dividiendo su comportamiento en tres estados principales: vertical, horizontal y "punto". Dependiendo de su estado actual, las reglas de desplazamiento cambian. Además, se creó una función que valida la posición del bloque en cada movimiento, verificando si alguna parte del bloque está fuera de los límites del tablero o en una celda no válida. Esta validación asegura que el bloque no pueda moverse a una posición incorrecta y permite un manejo adecuado de los límites del terreno. 
+Para la implementación de las palancas, se diseñó un sistema de interacción específico. Cada tipo de palanca activa o desactiva ciertas áreas del terreno, y algunas requieren que el bloque esté en un estado específico, como en posición "punto". Se implementaron condiciones adicionales en la lógica del juego para que las interacciones sean coherentes, y se añadió una sincronización precisa entre la activación de la palanca y los cambios en el entorno.
 
+### - Para el despliegue del juego 
+La primera opción que consideramos para el despliegue del juego es la de usar solamente XRDP, cuando recién implementamos esta opción, no sabíamos que solamente servía para conectarse remotamente desde una sola computadora a la vez, es decir, que si un usuario se conectaba a la máquina virtual (desplegada en AWS EC2), entraba al juego y jugaba todo iba excelente, pero si otro usuario se conectaba a la misma máquina virtual, el propio entorno quitaba la sesión al primer usuario para dárselo al segundo. Un punto para resaltar es que el avance se mantenía (Es decir, se guardaba el avance del juego que hizo el primer usuario para que el segundo lo continue).
+
+Adjuntamos un video con evidencias de lo mencionado: https://drive.google.com/file/d/1uKaPJ5XWATHuOSpzlhJn3006on3HEm6D/vie w?usp=sharing 
 
 
 
