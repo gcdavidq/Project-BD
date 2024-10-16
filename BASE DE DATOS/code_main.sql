@@ -25,14 +25,17 @@ DROP TABLE IF EXISTS `bd_project`.`historial` ;
 
 CREATE TABLE IF NOT EXISTS `bd_project`.`historial` (
   `id_historial` INT NOT NULL AUTO_INCREMENT,
+  `time_insert` DATETIME NULL DEFAULT NULL,
   `decision` ENUM('1', '2', '3', '4', '5') NOT NULL,
   `nivel` TINYINT UNSIGNED NOT NULL,
+  `orientation` VARCHAR(10) CHARACTER SET 'utf8mb3' NULL DEFAULT NULL,
   `posicion_x` INT NOT NULL,
   `posicion_y` INT NOT NULL,
+  `board` JSON NULL DEFAULT NULL,
   PRIMARY KEY (`id_historial`),
   UNIQUE INDEX `id_historial_UNIQUE` (`id_historial` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 93
+AUTO_INCREMENT = 129
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -47,8 +50,10 @@ CREATE TABLE IF NOT EXISTS `bd_project`.`votos` (
   `voto` ENUM('1', '2', '3', '4', '5') NOT NULL,
   `votos_id_historial` INT NOT NULL,
   `nivel` TINYINT UNSIGNED NOT NULL,
+  `orientation` VARCHAR(10) CHARACTER SET 'utf8mb3' NULL DEFAULT NULL,
   `posicion_x` INT NOT NULL,
   `posicion_y` INT NOT NULL,
+  `board` JSON NULL DEFAULT NULL,
   PRIMARY KEY (`id_votos`),
   UNIQUE INDEX `id_votos_UNIQUE` (`id_votos` ASC) VISIBLE,
   INDEX `fk_votos_historial_idx` (`votos_id_historial` ASC) VISIBLE,
@@ -56,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `bd_project`.`votos` (
     FOREIGN KEY (`votos_id_historial`)
     REFERENCES `bd_project`.`historial` (`id_historial`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 166
+AUTO_INCREMENT = 116
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -75,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `bd_project`.`verificaciones` (
     FOREIGN KEY (`verificaciones_id_votos`)
     REFERENCES `bd_project`.`votos` (`id_votos`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 141
+AUTO_INCREMENT = 116
 DEFAULT CHARACTER SET = utf8mb3;
 
 USE `bd_project` ;
@@ -90,27 +95,29 @@ DROP procedure IF EXISTS `bd_project`.`insertar_en_historial`;
 DELIMITER $$
 USE `bd_project`$$
 CREATE DEFINER=`user1_magno`@`%` PROCEDURE `insertar_en_historial`()
-BEGIN
-	DECLARE _voto ENUM('1','2','3','4','5');
-	DECLARE _nivel	TINYINT; 
-	DECLARE _posicion_x INT;
-	DECLARE _posicion_y INT;
-	DECLARE _tem INT;
-   
-   SELECT voto, nivel, posicion_x, posicion_y, COUNT(voto) AS frecuencia
-   INTO _voto, _nivel, _posicion_x, _posicion_y, _tem
-	FROM votos JOIN verificaciones ON votos.id_votos = verificaciones.verificaciones_id_votos
-	GROUP BY voto, nivel, posicion_x, posicion_y
-	HAVING frecuencia = 0
-	ORDER BY frecuencia DESC
-	LIMIT 1;
-	
-	UPDATE verificaciones
-   SET verificacion = 1 
-   WHERE verificacion = 0;
-
-   INSERT INTO historial (decision, nivel, posicion_x, posicion_y)
-   VALUES (_voto, _nivel, _posicion_x, _posicion_y);
+BEGIN
+   -- Declaramos las variables que se usarán dentro de esta rutina
+   DECLARE _voto ENUM('1','2','3','4','5');
+   DECLARE _nivel TINYINT; 
+   DECLARE _orientation VARCHAR(10);
+   DECLARE _posicion_x INT;
+   DECLARE _posicion_y INT;
+   DECLARE _board JSON;
+
+   -- Obtenemos el voto que más se repite con verificacion = 0
+   SELECT v.voto, v.nivel, v.orientation, v.posicion_x, v.posicion_y, v.board
+   INTO _voto, _nivel, _orientation, _posicion_x, _posicion_y, _board
+   FROM votos v
+   JOIN verificaciones ve ON v.id_votos = ve.verificaciones_id_votos
+   WHERE ve.verificacion = 0
+   GROUP BY v.voto, v.nivel, v.orientation, v.posicion_x, v.posicion_y, v.board
+   ORDER BY COUNT(v.voto) DESC
+   LIMIT 1;
+
+   -- Insertamos en la tabla historial la decisión basada en el voto de mayor frecuencia
+   INSERT INTO historial (time_insert, decision, nivel, orientation, posicion_x, posicion_y, board)
+   VALUES (NOW(), _voto, _nivel, _orientation, _posicion_x, _posicion_y, _board);
+
 END$$
 
 DELIMITER ;
@@ -124,23 +131,28 @@ DROP procedure IF EXISTS `bd_project`.`registrar_voto`;
 
 DELIMITER $$
 USE `bd_project`$$
-CREATE DEFINER=`user1_magno`@`%` PROCEDURE `registrar_voto`(
-	IN `_voto` ENUM('1','2','3','4','5'),
-	IN `_votos_id_historial` INT,
-	IN `_nivel` TINYINT,
-	IN `_x` INT,
-	IN `_y` INT
+CREATE DEFINER=`user1_magno`@`%` PROCEDURE `registrar_voto`(
+	IN `_voto` ENUM('1','2','3','4','5'),
+	IN `_votos_id_historial` INT,
+	IN `_nivel` TINYINT,
+	IN `_orientation` VARCHAR(10),
+	IN `_x` INT,
+	IN `_y` INT,
+	IN `_board` JSON
 )
-BEGIN
-	DECLARE last_voto_id INT;
-	
-	INSERT INTO votos (tiempo_registro, voto, votos_id_historial, nivel, posicion_x, posicion_y)
-	VALUES (NOW(), _voto, _votos_id_historial, _nivel , _x, _y);
-	
-   SET last_voto_id = LAST_INSERT_ID();
-
-   INSERT INTO verificaciones (verificaciones_id_votos, verificacion)
-   VALUES (last_voto_id, 0);
+BEGIN
+	-- declaramos la variable entera
+	DECLARE last_voto_id INT;
+	
+	-- validamos que el voto no sea nulo
+	-- para asigarle el valor de '5':'ninguno'
+    IF _voto IS NULL THEN
+        SET _voto = '5'; 
+    END IF;
+	
+	-- insertamos los valores dentro del parámetro en la tabla votos
+	INSERT INTO votos (tiempo_registro, voto, votos_id_historial, nivel, orientation, posicion_x, posicion_y, board)
+	VALUES (NOW(), _voto, _votos_id_historial, _nivel , _orientation, _x, _y, _board);
 END$$
 
 DELIMITER ;
@@ -149,27 +161,17 @@ USE `bd_project`;
 DELIMITER $$
 
 USE `bd_project`$$
-DROP TRIGGER IF EXISTS `bd_project`.`control_tiempo` $$
+DROP TRIGGER IF EXISTS `bd_project`.`insertar_en_verificaciones` $$
 USE `bd_project`$$
 CREATE
 DEFINER=`user1_magno`@`%`
-TRIGGER `bd_project`.`control_tiempo`
+TRIGGER `bd_project`.`insertar_en_verificaciones`
 AFTER INSERT ON `bd_project`.`votos`
 FOR EACH ROW
-BEGIN
-	DECLARE primer_tiempo DATETIME;
-	
-	SELECT MIN(tiempo_registro) INTO primer_tiempo
-	FROM votos JOIN verificaciones ON votos.id_votos = verificaciones.verificaciones_id_votos 
-	WHERE verificaciones.verificacion = 0;
-
-   IF primer_tiempo IS NOT NULL THEN
-	
-      IF TIMESTAMPDIFF(SECOND, primer_tiempo, NEW.tiempo_registro) >= 5 THEN
-
-         CALL insertar_en_historial();
-      END IF;
-   END IF;
+BEGIN
+	-- insertamos los valores en la tabla verificaciones
+   INSERT INTO verificaciones (verificaciones_id_votos, verificacion)
+   VALUES (NEW.id_votos, 0);
 END$$
 
 
